@@ -6,10 +6,10 @@ app.use(express.json());
 
 // Rota de mock para autenticação
 app.post('/api/auth', (req, res) => {
-  const { username, password } = req.body;
+  const { client_id, client_secret } = req.body;
 
   // Simulação simples de validação
-  if (username === 'admin' && password === '123456') {
+  if (client_id === 'admin' && client_secret === '123456') {
     return res.status(200).json({
       success: true,
       token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mocked-token-aqui',
