@@ -12,7 +12,7 @@ app.post('/api/auth', (req, res) => {
   if (client_id === 'admin' && client_secret === '123456') {
     return res.status(200).json({
       success: true,
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mocked-token-aqui',
+      access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mocked-token-aqui',
       user: {
         id: 1,
         name: 'Renan',
