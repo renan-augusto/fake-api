@@ -30,7 +30,7 @@ app.post('/api/auth', (req, res) => {
 
 // Rota de healthcheck só pra ver se a API tá de pé
 app.get('/', (req, res) => {
-  res.send('Mock API rodando! 🚀');
+  res.send('Mock API BRABA rodando! 🚀');
 });
 
 const PORT = process.env.PORT || 3000;
