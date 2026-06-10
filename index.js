@@ -1,8 +1,11 @@
 const express = require('express');
 const app = express();
+const swaggerUi = require('swagger-ui-express');
+const openApiSpec = require('./openapi');
 
 // Permite receber JSON no body da requisição
 app.use(express.json());
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
 // Rota de mock para autenticação
 app.post('/api/auth', (req, res) => {
@@ -55,8 +58,8 @@ app.patch('/work-orders/:workOrderId', (req, res) => {
 
   res.json({
     success: true,
-    message: 'Peça atualizada com sucesso',
-    partId,
+    message: 'Ordem atualizada com sucesso',
+    workOrderId,
     updatedData: data
   });
 });
