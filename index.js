@@ -28,7 +28,40 @@ app.post('/api/auth', (req, res) => {
   });
 });
 
-// Rota de healthcheck só pra ver se a API tá de pé
+
+app.get('/parts/:partId', (req, res) => {
+  const { partId } = req.params;
+
+  if (partId !== '123') {
+    return res.status(404).json({
+      error: 'Peça não encontrada'
+    });
+  }
+
+  res.json({
+    id: '123',
+    description: 'Filtro de óleo',
+    price: 49.9
+  });
+});
+
+
+app.patch('/work-orders/:workOrderId', (req, res) => {
+  const { workOrderId } = req.params;
+  const data = req.body;
+
+  console.log('PartId:', workOrderId);
+  console.log('Dados recebidos:', data);
+
+  res.json({
+    success: true,
+    message: 'Peça atualizada com sucesso',
+    partId,
+    updatedData: data
+  });
+});
+
+
 app.get('/', (req, res) => {
   res.send('Mock API BRABA rodando! 🚀');
 });
