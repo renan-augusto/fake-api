@@ -6,7 +6,20 @@ const openApiSpec = require('./openapi');
 app.use(express.json());
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
-app.post('/api/auth', (req, res) => {
+// Middleware para validar o token
+const checkToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({
+      success: false,
+      message: 'Acesso negado. Bearer token não fornecido.'
+    });
+  }
+  next();
+};
+
+app.post('/api/auth', checkToken, (req, res) => {
   const { client_id, client_secret } = req.body;
 
   if (client_id === 'admin' && client_secret === '123456') {
@@ -27,8 +40,7 @@ app.post('/api/auth', (req, res) => {
   });
 });
 
-
-app.get('/parts/:partId', (req, res) => {
+app.get('/parts/:partId', checkToken, (req, res) => {
   const { partId } = req.params;
 
   if (partId !== '123') {
@@ -44,8 +56,7 @@ app.get('/parts/:partId', (req, res) => {
   });
 });
 
-
-app.patch('/work-orders/:workOrderId', (req, res) => {
+app.patch('/work-orders/:workOrderId', checkToken, (req, res) => {
   const { workOrderId } = req.params;
   const data = req.body;
 
@@ -59,7 +70,6 @@ app.patch('/work-orders/:workOrderId', (req, res) => {
     updatedData: data
   });
 });
-
 
 app.get('/', (req, res) => {
   res.json({
