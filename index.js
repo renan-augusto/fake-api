@@ -19,7 +19,7 @@ const checkToken = (req, res, next) => {
   next();
 };
 
-app.post('/api/auth', checkToken, (req, res) => {
+app.post('/api/auth', (req, res) => {
   const { client_id, client_secret } = req.body;
 
   if (client_id === 'admin' && client_secret === '123456') {
