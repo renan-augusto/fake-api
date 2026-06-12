@@ -3,15 +3,12 @@ const app = express();
 const swaggerUi = require('swagger-ui-express');
 const openApiSpec = require('./openapi');
 
-// Permite receber JSON no body da requisição
 app.use(express.json());
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
-// Rota de mock para autenticação
 app.post('/api/auth', (req, res) => {
   const { client_id, client_secret } = req.body;
 
-  // Simulação simples de validação
   if (client_id === 'admin' && client_secret === '123456') {
     return res.status(200).json({
       success: true,
@@ -24,7 +21,6 @@ app.post('/api/auth', (req, res) => {
     });
   }
 
-  // Falha na autenticação
   return res.status(401).json({
     success: false,
     message: 'Usuário ou senha incorretos.'
@@ -66,7 +62,10 @@ app.patch('/work-orders/:workOrderId', (req, res) => {
 
 
 app.get('/', (req, res) => {
-  res.send('Mock API BRABA rodando! 🚀');
+  res.json({
+    success: true,
+    message: 'Mock API BRABA rodando! 🚀'
+  })
 });
 
 const PORT = process.env.PORT || 3000;
