@@ -1,21 +1,33 @@
 const express = require('express');
-const app = express();
 const swaggerUi = require('swagger-ui-express');
+
+const app = express();
 const openApiSpec = require('./openapi');
 
 app.use(express.json());
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
-// Middleware para validar o token
+const MOCK_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mocked-token-aqui';
+
 const checkToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
-  if (!authHeader || !authHeader.startsWith('Bearer ') || !authHeader.contains('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mocked-token-aqui')) {
+  if (!authHeader) {
     return res.status(401).json({
       success: false,
-      message: 'Acesso negado. Bearer token não fornecido.'
+      message: 'Token não informado.'
     });
   }
+
+  const [scheme, token] = authHeader.split(' ');
+
+  if (!scheme || scheme.toLowerCase() !== 'bearer' || token !== MOCK_TOKEN) {
+    return res.status(401).json({
+      success: false,
+      message: 'Token inválido.'
+    });
+  }
+
   next();
 };
 
@@ -25,7 +37,7 @@ app.post('/api/auth', (req, res) => {
   if (client_id === 'admin' && client_secret === '123456') {
     return res.status(200).json({
       success: true,
-      access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mocked-token-aqui',
+      access_token: MOCK_TOKEN,
       user: {
         id: 1,
         name: 'Renan',
@@ -60,7 +72,7 @@ app.patch('/work-orders/:workOrderId', checkToken, (req, res) => {
   const { workOrderId } = req.params;
   const data = req.body;
 
-  console.log('PartId:', workOrderId);
+  console.log('WorkOrderId:', workOrderId);
   console.log('Dados recebidos:', data);
 
   res.json({
@@ -75,10 +87,11 @@ app.get('/', (req, res) => {
   res.json({
     success: true,
     message: 'Mock API BRABA rodando! 🚀'
-  })
+  });
 });
 
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
