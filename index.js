@@ -10,7 +10,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec));
 const checkToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  if (!authHeader || !authHeader.startsWith('Bearer ') || !authHeader.contains('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mocked-token-aqui')) {
     return res.status(401).json({
       success: false,
       message: 'Acesso negado. Bearer token não fornecido.'
