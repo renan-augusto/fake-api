@@ -52,7 +52,7 @@ app.post('/api/auth', (req, res) => {
   });
 });
 
-app.get('/parts/:partId', checkToken, (req, res) => {
+app.get('/parts/:partId', (req, res) => {
   const { partId } = req.params;
 
   if (partId !== '123') {
@@ -68,7 +68,7 @@ app.get('/parts/:partId', checkToken, (req, res) => {
   });
 });
 
-app.patch('/work-orders/:workOrderId', checkToken, (req, res) => {
+app.patch('/work-orders/:workOrderId', (req, res) => {
   const { workOrderId } = req.params;
   const data = req.body;
 
